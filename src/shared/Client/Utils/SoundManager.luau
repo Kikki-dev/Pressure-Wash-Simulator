@@ -1,0 +1,3 @@
+local SoundManager = {}
+
+return SoundManager

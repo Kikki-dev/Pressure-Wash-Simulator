@@ -1,0 +1,3 @@
+local Shop = {}
+
+return Shop

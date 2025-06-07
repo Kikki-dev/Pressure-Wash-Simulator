@@ -1,0 +1,3 @@
+local Inputs = {}
+
+return Inputs
