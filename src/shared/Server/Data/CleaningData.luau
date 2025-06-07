@@ -1,5 +1,5 @@
 local DataStoreService = game:GetService("DataStoreService")
-local DirtStore = DataStoreService:GetDataStore("CleanedModels_v6")
+local DirtStore = DataStoreService:GetDataStore("CleanedModels_v10")
 
 local CleaningData = {}
 local saveQueues = {}
@@ -26,15 +26,13 @@ function CleaningData.Init(player, DirtFolder)
 	end
 end
 
-function CleaningData:MarkClean(player, model)
+function CleaningData:MarkClean(player, DirlModelID)
 	local key = "Player_" .. player.UserId
-
-	local modelId = model:GetAttribute("DirlModelID")
 
 	if not saveQueues[key] then
 		saveQueues[key] = {}
 	end
-	saveQueues[key][modelId] = true
+	saveQueues[key][DirlModelID] = true
 
 	if not isSaving[key] then
 		isSaving[key] = true
