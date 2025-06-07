@@ -1,5 +1,5 @@
 local DataStoreService = game:GetService("DataStoreService")
-local DirtStore = DataStoreService:GetDataStore("CleanedModels_v10")
+local DirtStore = DataStoreService:GetDataStore("CleanedModels_v12")
 
 local CleaningData = {}
 local saveQueues = {}
