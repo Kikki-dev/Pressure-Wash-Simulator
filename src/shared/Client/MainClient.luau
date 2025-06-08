@@ -4,12 +4,14 @@ local MainClient = {}
 local clientFolder = ReplicatedStorage.Shared:WaitForChild("Client")
 
 local Interface = require(ReplicatedStorage.Shared.Client.UI.Interface)
+local Inventory = require(ReplicatedStorage.Shared.Client.UI.Inventory)
 local Cleaner = require(clientFolder:WaitForChild("Gameplay").Cleaner)
 
 function MainClient:Start()
 	print("MainClient Started")
 	Cleaner.Start()
 	Interface.Init()
+	Inventory.Init()
 end
 
 return MainClient
