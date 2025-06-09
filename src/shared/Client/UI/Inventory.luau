@@ -15,9 +15,11 @@ local inventoryGui: ScreenGui = GUIFolder.Inventory.InventoryGui
 function Inventory.Init()
 	local inventoryGuiClone = inventoryGui:Clone()
 	inventoryGuiClone.Parent = player.PlayerGui
-	inventoryGuiClone.Enabled = true -- retirer cette ligne quand l'inv sera codé
 
-	TweenHelper.CloseFrame(inventoryGuiClone.Main)
+	local MainFrame = inventoryGuiClone:WaitForChild("Main")
+
+	TweenHelper.SetupCloseButton(inventoryGuiClone.Main)
+	TweenHelper.ToggleFrame(MainFrame, true)
 	TweenHelper.Hover(inventoryGuiClone.Main.Close)
 end
 
