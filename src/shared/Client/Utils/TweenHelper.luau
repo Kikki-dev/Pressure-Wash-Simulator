@@ -23,11 +23,11 @@ function TweenHelper.ToggleFrame(Frame: Frame, open: boolean)
 	end
 	local originalSize = Frame:GetAttribute("OriginalSize")
 
+	local TWEEN_DURATION = 0.15
+
 	if open then
 		gui.Enabled = true
 		Frame.Size = UDim2.new(0, 0, 0, 0)
-
-		local TWEEN_DURATION = 0.2
 
 		local OpeningInfo = TweenInfo.new(TWEEN_DURATION)
 		local OpeningTable = { Size = originalSize }
@@ -35,8 +35,6 @@ function TweenHelper.ToggleFrame(Frame: Frame, open: boolean)
 		local tween = CreateTween(Frame, OpeningInfo, OpeningTable)
 		tween:Play()
 	else
-		local TWEEN_DURATION = 0.2
-
 		local ClosingInfo = TweenInfo.new(TWEEN_DURATION)
 		local ClosingTable = { Size = UDim2.new(0, 0, 0, 0) }
 

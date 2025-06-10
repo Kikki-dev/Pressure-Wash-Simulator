@@ -7,6 +7,7 @@ local UserInputService = game:GetService("UserInputService")
 local ClientFolder = ReplicatedStorage.Shared:WaitForChild("Client")
 
 local UtilsFolder = ClientFolder:WaitForChild("Utils")
+local Cleaners = require(ReplicatedStorage.Shared.Server.Gameplay.Cleaners)
 local HitboxManager = require(UtilsFolder.HitboxManager)
 
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
@@ -50,6 +51,10 @@ end
 
 function CleaningController.Start()
 	print("[CleaningController] Started.")
+
+	for name, data in pairs(Cleaners) do
+		print(name .. ": Range=" .. data.Range)
+	end
 
 	UserInputService.InputBegan:Connect(function(input, gpe)
 		if gpe then

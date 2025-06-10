@@ -1,16 +1,14 @@
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
-repeat
-	task.wait(1)
-until player:GetAttribute("Loaded")
-
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenHelper = require(ReplicatedStorage.Shared.Client.Utils.TweenHelper)
 local Inventory = {}
 
 local GUIFolder = ReplicatedStorage.UI.GUI
 local inventoryGui: ScreenGui = GUIFolder.Inventory.InventoryGui
+
+local InventoryEvent: BindableEvent = ReplicatedStorage.Remotes:WaitForChild("Inventory")
 
 function Inventory.Init()
 	local inventoryGuiClone = inventoryGui:Clone()
@@ -21,6 +19,10 @@ function Inventory.Init()
 	TweenHelper.SetupCloseButton(inventoryGuiClone.Main)
 	TweenHelper.ToggleFrame(MainFrame, true)
 	TweenHelper.Hover(inventoryGuiClone.Main.Close)
+
+	InventoryEvent.Event:Connect(function()
+		TweenHelper.ToggleFrame(MainFrame, true)
+	end)
 end
 
 return Inventory

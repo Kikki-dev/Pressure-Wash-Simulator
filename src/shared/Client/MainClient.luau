@@ -1,4 +1,11 @@
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local player = Players.LocalPlayer
+
+repeat
+	task.wait(1)
+until player:GetAttribute("Loaded")
+
 local MainClient = {}
 
 local clientFolder = ReplicatedStorage.Shared:WaitForChild("Client")
