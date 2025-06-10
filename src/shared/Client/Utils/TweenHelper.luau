@@ -57,8 +57,28 @@ function TweenHelper.Hover(Button)
 		return
 	end
 
+	if not Button:FindFirstChild("UIScale") then
+		return
+	end
+
+	local UIScale = Button:FindFirstChild("UIScale")
+
+	local TWEEN_DURATION = 0.1
+
+	local function Tweening(Scale)
+		local tweenInfo: TweenInfo = TweenInfo.new(TWEEN_DURATION)
+		local PropertyTable = { Scale = Scale }
+
+		local tween = CreateTween(UIScale, tweenInfo, PropertyTable)
+		tween:Play()
+	end
+
 	Button.MouseEnter:Connect(function()
-		print("Button is hovered")
+		Tweening(1.1)
+	end)
+
+	Button.MouseLeave:Connect(function()
+		Tweening(1)
 	end)
 end
 
