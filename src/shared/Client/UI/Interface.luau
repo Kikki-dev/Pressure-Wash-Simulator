@@ -18,12 +18,13 @@ function Interface.Init()
 	InterfaceCopy.Parent = player.PlayerGui
 
 	local MainFrame = InterfaceCopy.Main
-
 	local Inventory = MainFrame:WaitForChild("Inventory")
+
+	TweenHelper.Hover(Inventory.Open)
+
 	Inventory.Open.MouseButton1Click:Connect(function()
-		print("OpenInv pressed")
-		TweenHelper.Hover(Inventory.Open)
 		InventoryEvent:Fire()
+		TweenHelper.PressedTween(Inventory.Open)
 	end)
 end
 

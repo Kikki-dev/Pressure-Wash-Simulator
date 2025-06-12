@@ -48,17 +48,41 @@ function TweenHelper.ToggleFrame(Frame: Frame, open: boolean)
 end
 
 function TweenHelper.PressedTween(Button)
-	print(Button)
+	if not Button:FindFirstChild("UIScale") then
+		local UIScale = Instance.new("UIScale")
+		UIScale.Parent = Button
+	end
+
+	local UIScale = Button:FindFirstChild("UIScale")
+
+	local TWEEN_DURATION = 0.08
+
+	local function Tweening(Scale)
+		local tweenInfo: TweenInfo = TweenInfo.new(TWEEN_DURATION)
+		local PropertyTable = { Scale = Scale }
+
+		local tween = CreateTween(UIScale, tweenInfo, PropertyTable)
+		tween:Play()
+
+		tween.Completed:Wait()
+
+		PropertyTable = { Scale = 1 }
+
+		local tween2 = CreateTween(UIScale, tweenInfo, PropertyTable)
+		tween2:Play()
+	end
+
+	Tweening(0.95)
 end
 
 function TweenHelper.Hover(Button)
 	if not (Button:IsA("TextButton") or Button:IsA("ImageButton")) then
-		print("Close Button is not a Button")
 		return
 	end
 
 	if not Button:FindFirstChild("UIScale") then
-		return
+		local UIScale = Instance.new("UIScale")
+		UIScale.Parent = Button
 	end
 
 	local UIScale = Button:FindFirstChild("UIScale")
@@ -74,7 +98,7 @@ function TweenHelper.Hover(Button)
 	end
 
 	Button.MouseEnter:Connect(function()
-		Tweening(1.1)
+		Tweening(1.05)
 	end)
 
 	Button.MouseLeave:Connect(function()
@@ -86,7 +110,6 @@ function TweenHelper.SetupCloseButton(Frame: Frame)
 	local closeButton = Frame:WaitForChild("Close")
 
 	if not (closeButton:IsA("TextButton") or closeButton:IsA("ImageButton")) then
-		warn("Le bouton Close n'est pas valide.")
 		return
 	end
 
