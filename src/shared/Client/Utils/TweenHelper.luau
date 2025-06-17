@@ -1,16 +1,20 @@
+-- TweenHelper: Utility module to simplify common UI tweening actions
 local TweenService = game:GetService("TweenService")
 local TweenHelper = {}
 
+-- Helper function to create and return a tween
 local function CreateTween(instance, TweenInfo: TweenInfo, propertyTable)
 	local tween = TweenService:Create(instance, TweenInfo, propertyTable)
 	return tween
 end
 
+-- Smoothly toggles a UI frame open or closed
 function TweenHelper.ToggleFrame(Frame: Frame, open: boolean)
 	if not Frame then
 		return
 	end
 
+	-- Try to find the parent ScreenGui
 	local gui = Frame:FindFirstAncestorOfClass("ScreenGui")
 
 	if not gui then
@@ -18,6 +22,7 @@ function TweenHelper.ToggleFrame(Frame: Frame, open: boolean)
 		return
 	end
 
+	-- Store the original size if not already stored
 	if not Frame:GetAttribute("OriginalSize") then
 		Frame:SetAttribute("OriginalSize", Frame.Size)
 	end
@@ -26,6 +31,7 @@ function TweenHelper.ToggleFrame(Frame: Frame, open: boolean)
 	local TWEEN_DURATION = 0.15
 
 	if open then
+		-- Prepare frame to appear with a scale animation
 		gui.Enabled = true
 		Frame.Size = UDim2.new(0, 0, 0, 0)
 
@@ -35,6 +41,7 @@ function TweenHelper.ToggleFrame(Frame: Frame, open: boolean)
 		local tween = CreateTween(Frame, OpeningInfo, OpeningTable)
 		tween:Play()
 	else
+		-- Animate the frame closing down to 0, then disable it
 		local ClosingInfo = TweenInfo.new(TWEEN_DURATION)
 		local ClosingTable = { Size = UDim2.new(0, 0, 0, 0) }
 
@@ -47,6 +54,7 @@ function TweenHelper.ToggleFrame(Frame: Frame, open: boolean)
 	end
 end
 
+-- Plays a quick "press" scale effect on a button
 function TweenHelper.PressedTween(Button)
 	if not Button:FindFirstChild("UIScale") then
 		local UIScale = Instance.new("UIScale")
@@ -54,7 +62,6 @@ function TweenHelper.PressedTween(Button)
 	end
 
 	local UIScale = Button:FindFirstChild("UIScale")
-
 	local TWEEN_DURATION = 0.08
 
 	local function Tweening(Scale)
@@ -63,11 +70,10 @@ function TweenHelper.PressedTween(Button)
 
 		local tween = CreateTween(UIScale, tweenInfo, PropertyTable)
 		tween:Play()
-
 		tween.Completed:Wait()
 
+		-- Reset scale to normal after animation
 		PropertyTable = { Scale = 1 }
-
 		local tween2 = CreateTween(UIScale, tweenInfo, PropertyTable)
 		tween2:Play()
 	end
@@ -75,6 +81,7 @@ function TweenHelper.PressedTween(Button)
 	Tweening(0.95)
 end
 
+-- Adds hover animation to a button (slightly enlarges on mouse enter)
 function TweenHelper.Hover(Button)
 	if not (Button:IsA("TextButton") or Button:IsA("ImageButton")) then
 		return
@@ -86,7 +93,6 @@ function TweenHelper.Hover(Button)
 	end
 
 	local UIScale = Button:FindFirstChild("UIScale")
-
 	local TWEEN_DURATION = 0.1
 
 	local function Tweening(Scale)
@@ -106,6 +112,7 @@ function TweenHelper.Hover(Button)
 	end)
 end
 
+-- Automatically wires up a close button to close its frame with animation
 function TweenHelper.SetupCloseButton(Frame: Frame)
 	local closeButton = Frame:WaitForChild("Close")
 
@@ -119,4 +126,5 @@ function TweenHelper.SetupCloseButton(Frame: Frame)
 	end)
 end
 
+-- return the module
 return TweenHelper

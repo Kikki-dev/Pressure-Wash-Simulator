@@ -1,14 +1,19 @@
+-- DataService: Handles saving and loading player data using Roblox DataStore
 local DataService = {}
 
+-- Services
 local DataStoreService = game:GetService("DataStoreService")
 
+-- Define the main DataStore
 local GlobalDataStore = DataStoreService:GetDataStore("GlobalData")
 
+-- Default values for new players
 local defaultData = {
 	Money = 0,
 	Level = 1,
 }
 
+-- Creates leaderstats folder and fills it with values
 local function createLeaderstats(player, data)
 	local leaderstats = Instance.new("Folder")
 	leaderstats.Name = "leaderstats"
@@ -22,8 +27,11 @@ local function createLeaderstats(player, data)
 	end
 end
 
+-- Called when a player joins the game
 function DataService.SetUp(player)
 	local key = "Player_" .. player.UserId
+
+	-- Try to load data from DataStore
 	local success, data = pcall(function()
 		return GlobalDataStore:GetAsync(key)
 	end)
@@ -33,6 +41,7 @@ function DataService.SetUp(player)
 		data = {}
 	end
 
+	-- Fallback to default values if needed
 	data = data or {}
 	for stat, default in pairs(defaultData) do
 		if data[stat] == nil then
@@ -43,6 +52,7 @@ function DataService.SetUp(player)
 	createLeaderstats(player, data)
 end
 
+-- Called when a player leaves the game
 function DataService.Save(player)
 	local key = "Player_" .. player.UserId
 	local leaderstats = player:FindFirstChild("leaderstats")
@@ -58,6 +68,7 @@ function DataService.Save(player)
 		end
 	end
 
+	-- Try to save the data
 	local success, err = pcall(function()
 		GlobalDataStore:SetAsync(key, dataToSave)
 	end)

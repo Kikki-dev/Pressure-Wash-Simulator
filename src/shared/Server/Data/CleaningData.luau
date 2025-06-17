@@ -1,9 +1,13 @@
+-- Saving system for dirty parts
+
 local DataStoreService = game:GetService("DataStoreService")
 local DirtStore = DataStoreService:GetDataStore("CleanedModels_v12")
 
 local CleaningData = {}
 local saveQueues = {}
 local isSaving = {}
+
+-- Setup everything : look for cleaned parts using the last function of this script to destroy decals from cleaned parts & setting the Attribute "IsDirty" to false.
 
 function CleaningData.Init(player, DirtFolder)
 	local cleanedModels = CleaningData:GetCleanedModels(player)
@@ -26,6 +30,8 @@ function CleaningData.Init(player, DirtFolder)
 	end
 end
 
+-- If the player cleans a part it's cleaned and saved in the dataSotore
+
 function CleaningData:MarkClean(player, DirlModelID)
 	local key = "Player_" .. player.UserId
 
@@ -34,29 +40,32 @@ function CleaningData:MarkClean(player, DirlModelID)
 	end
 	saveQueues[key][DirlModelID] = true
 
-	if not isSaving[key] then
-		isSaving[key] = true
-		task.delay(5, function()
-			local data = DirtStore:GetAsync(key) or {}
-
-			for id in pairs(saveQueues[key]) do
-				data[id] = true
-			end
-
-			local success, err = pcall(function()
-				DirtStore:SetAsync(key, data)
-			end)
-
-			if not success then
-				warn("[CleaningData] Failed to save dirt data:", err)
-			end
-
-			saveQueues[key] = nil
-			isSaving[key] = false
-		end)
+	if isSaving[key] then
+		return
 	end
+
+	isSaving[key] = true
+	task.delay(5, function()
+		local data = DirtStore:GetAsync(key) or {}
+
+		for id in pairs(saveQueues[key]) do
+			data[id] = true
+		end
+
+		local success, err = pcall(function()
+			DirtStore:SetAsync(key, data)
+		end)
+
+		if not success then
+			warn("[CleaningData] Failed to save dirt data:", err)
+		end
+
+		saveQueues[key] = nil
+		isSaving[key] = false
+	end)
 end
 
+-- Get the cleaned parts stored in the data store using a key
 function CleaningData:GetCleanedModels(player)
 	local key = "Player_" .. player.UserId
 	local success, result = pcall(function()

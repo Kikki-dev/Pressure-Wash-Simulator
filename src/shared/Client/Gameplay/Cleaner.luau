@@ -1,3 +1,5 @@
+-- Handles everything related to the cleaning system on the Client : the use of the cleaner to wash parts and detect when a player is able to wash
+
 local CleaningController = {}
 
 local Players = game:GetService("Players")
@@ -7,7 +9,7 @@ local UserInputService = game:GetService("UserInputService")
 local ClientFolder = ReplicatedStorage.Shared:WaitForChild("Client")
 
 local UtilsFolder = ClientFolder:WaitForChild("Utils")
---local Cleaners = require(ReplicatedStorage.Shared.Server.Gameplay.Cleaners)
+-- hitbox Module for futur option
 local HitboxManager = require(UtilsFolder.HitboxManager)
 
 local Remotes = ReplicatedStorage:WaitForChild("Remotes")
@@ -17,8 +19,11 @@ local mouse = player:GetMouse()
 
 local isCleaning = false
 local cleaningLoopRunning = false
+
+-- max distance between the player and the part to wash
 local raycastDistance = 20
 
+-- Washing a part : Destroying the decal on it and setting the attribute to false
 local function Clean()
 	if not player.Character:FindFirstChildOfClass("Tool") then
 		return
@@ -49,6 +54,8 @@ local function Clean()
 	end
 end
 
+-- Set up everything
+
 function CleaningController.Start()
 	print("[CleaningController] Started.")
 
@@ -75,6 +82,8 @@ function CleaningController.Start()
 			end
 		end
 	end)
+
+	--Inputs from the player to detect when he wants to wash.
 
 	UserInputService.InputEnded:Connect(function(input)
 		if input.UserInputType == Enum.UserInputType.MouseButton1 then
